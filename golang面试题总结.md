@@ -422,7 +422,7 @@ A：读`已经关闭`的chan能一直读到东西，但是读到的内容根据�
 - 如果chan关闭前，buffer内的元素已经被`读完`，chan内无值，接下来所有接收的值都会非阻塞直接成功，返回channel元素的`零值`，但是第二个bool值一直为false
 - 写已经关闭的chan会panic
 
-![golang_detective](C:\Users\zmkfm\Desktop\记录\golang_detective.jpg)
+![image-20210403182905953](https://raw.githubusercontent.com/zmk-c/GolangGuide/master/img/20210403183014.png)
 
 ## 4.常见算法题
 
