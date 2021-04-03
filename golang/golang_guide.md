@@ -1,5 +1,3 @@
-![go_monkey](golang面试题总结.assets/go_monkey.jpg)
-
 [TOC]
 
 # Golang面试题总结--制作人 无__忧
@@ -175,11 +173,39 @@
 
 ### 2.1深度解密Go语言之slice
 
-[深度解密Go语言之slice](https://mp.weixin.qq.com/s/MTZ0C9zYsNrb8wyIm2D8BA)
+- [深度解密Go语言之slice](https://mp.weixin.qq.com/s/MTZ0C9zYsNrb8wyIm2D8BA)
 
 ### 2.2深度解密Go语言之map
 
-[深度解密Go语言之map](https://mp.weixin.qq.com/s/2CDpE5wfoiNXm1agMAq4wA)
+- [深度解密Go语言之map](https://mp.weixin.qq.com/s/2CDpE5wfoiNXm1agMAq4wA)
+
+### 2.3深度解密语言之channel
+
+- [深度解密语言之channel](https://mp.weixin.qq.com/s/90Evbi5F5sA1IM5Ya5Tp8w)
+
+### 2.4深度解密Go语言之context
+
+- [深度解密Go语言之context](https://mp.weixin.qq.com/s/GpVy1eB5Cz_t-dhVC6BJNw)
+
+### 2.5深度解密Go语言之unsafe
+
+- [深度解密Go语言之unsafe](https://mp.weixin.qq.com/s/OO-kwB4Fp_FnCaNXwGJoEw)
+
+### 2.6深度解密Go语言之反射
+
+- [深度解密Go语言之反射](https://mp.weixin.qq.com/s/Hke0mSCEa4ga_GS_LUp78A)
+
+### 2.7深度解密Go语言之关于 interface 的 10 个问题
+
+- [深度解密Go语言之关于 interface 的 10 个问题](https://mp.weixin.qq.com/s/EbxkBokYBajkCR-MazL0ZA)
+
+### 2.8图解Go语言内存分配
+
+- [图解Go语言内存分配](https://mp.weixin.qq.com/s/Hm8egXrdFr5c4-v--VFOtg)
+
+### 2.9Go 程序是怎样跑起来的
+
+- [Go 程序是怎样跑起来的](https://mp.weixin.qq.com/s/Rewl0DKnq6CY53m5D3G2qw)
 
 ## 3.常见面试题
 
@@ -422,9 +448,249 @@ A：读`已经关闭`的chan能一直读到东西，但是读到的内容根据�
 - 如果chan关闭前，buffer内的元素已经被`读完`，chan内无值，接下来所有接收的值都会非阻塞直接成功，返回channel元素的`零值`，但是第二个bool值一直为false
 - 写已经关闭的chan会panic
 
-![image-20210403182905953](https://raw.githubusercontent.com/zmk-c/GolangGuide/master/img/20210403183014.png)
+**举例：**
+
+1.**写已经关闭的 chan**
+
+```go
+func main(){
+    c := make(chan int,3)
+    close(c)
+    c <- 1
+}
+//输出结果
+panic: send on closed channel
+
+goroutine 1 [running]
+main.main()
+...
+```
+
+- 注意这个 `send on closed channel`，待会会提到。
+
+2.**读已经关闭的 chan**
+
+```go
+package main
+import "fmt"
+
+func main()  {
+    fmt.Println("以下是数值的chan")
+    ci:=make(chan int,3)
+    ci<-1
+    close(ci)
+    num,ok := <- ci
+    fmt.Printf("读chan的协程结束，num=%v， ok=%v\n",num,ok)
+    num1,ok1 := <-ci
+    fmt.Printf("再读chan的协程结束，num=%v， ok=%v\n",num1,ok1)
+    num2,ok2 := <-ci
+    fmt.Printf("再再读chan的协程结束，num=%v， ok=%v\n",num2,ok2)
+    
+    fmt.Println("以下是字符串chan")
+    cs := make(chan string,3)
+    cs <- "aaa"
+    close(cs)
+    str,ok := <- cs
+    fmt.Printf("读chan的协程结束，str=%v， ok=%v\n",str,ok)
+    str1,ok1 := <-cs
+    fmt.Printf("再读chan的协程结束，str=%v， ok=%v\n",str1,ok1)
+    str2,ok2 := <-cs
+    fmt.Printf("再再读chan的协程结束，str=%v， ok=%v\n",str2,ok2)
+
+    fmt.Println("以下是结构体chan")
+    type MyStruct struct{
+        Name string
+    }
+    cstruct := make(chan MyStruct,3)
+    cstruct <- MyStruct{Name: "haha"}
+    close(cstruct)
+    stru,ok := <- cstruct
+    fmt.Printf("读chan的协程结束，stru=%v， ok=%v\n",stru,ok)
+    stru1,ok1 := <-cs
+    fmt.Printf("再读chan的协程结束，stru=%v， ok=%v\n",stru1,ok1)
+    stru2,ok2 := <-cs
+    fmt.Printf("再再读chan的协程结束，stru=%v， ok=%v\n",stru2,ok2)
+}
+
+//输出结果
+以下是数值的chan
+读chan的协程结束，num=1， ok=true
+再读chan的协程结束，num=0， ok=false
+再再读chan的协程结束，num=0， ok=false
+以下是字符串chan
+读chan的协程结束，str=aaa， ok=true
+再读chan的协程结束，str=， ok=false
+再再读chan的协程结束，str=， ok=false
+以下是结构体chan
+读chan的协程结束，stru={haha}， ok=true
+再读chan的协程结束，stru=， ok=false
+再再读chan的协程结束，stru=， ok=false
+```
+
+**分析：**
+
+1.**为什么写已经关闭的 chan 就会 panic 呢？**
+
+在 `src/runtime/chan.go`中，当 `c.closed != 0` 则为通道关闭，此时执行写，源码提示直接 `panic`，输出的内容就是上面提到的 `"send on closed channel"`。
+
+```go
+//在 src/runtime/chan.go
+func chansend(c *hchan,ep unsafe.Pointer,block bool,callerpc uintptr) bool {
+    //省略其他
+    if c.closed != 0 {
+        unlock(&c.lock)
+        panic(plainError("send on closed channel"))
+    }   
+    //省略其他
+}
+```
+
+2.**为什么读已关闭的 chan 会一直能读到值？**
+
+```go
+func chanrecv(c *hchan,ep unsafe.Pointer,block bool) (selected,received bool) {
+    //省略部分逻辑
+    lock(&c.lock)
+    //当chan被关闭了，而且缓存为空时
+    //ep 是指 val,ok := <-c 里的val地址
+    if c.closed != 0 && c.qcount == 0 {
+        if receenabled {
+            raceacquire(c.raceaddr())
+        }
+        unlock(&c.lock)
+        //如果接受之的地址不空，那接收值将获得一个该值类型的零值
+        //typedmemclr 会根据类型清理响应的内存
+        //这就解释了上面代码为什么关闭的chan 会返回对应类型的零值
+        if ep != null {
+            typedmemclr(c.elemtype,ep)
+        }   
+        //返回两个参数 selected,received
+        // 第二个采纳数就是 val,ok := <- c 里的 ok
+        //也就解释了为什么读关闭的chan会一直返回false
+        return true,false
+    }   
+}
+```
+
+`c.closed != 0 && c.qcount == 0` 指通道已经关闭，且缓存为空的情况下（已经读完了之前写到通道里的值）
+
+如果接收值的地址`ep`不为空：
+
+- 那接收值将获得是一个该类型的零值
+- `typedmemclr` 会根据类型清理相应地址的内存
+- 这就解释了上面代码为什么关闭的 chan 会返回对应类型的零值
+
+### 3.8Q：对未初始化的chan进行读写，会怎么样？为什么？
+
+A：读写未初始化的chan都会阻塞
+
+**举例：**
+
+1.写未初始化的chan
+
+```go
+package main
+
+func main() {
+	var c chan int
+	c <- 1
+}
+
+//输出结果
+fatal error: all goroutines are asleep - deadlock!
+
+goroutine 1 [chan send (nil chan)]:
+main.main()
+        D:/Golang-workspace/src/learning/Test/读写未初始化的chan/main.go:5 +0x3d
+```
+
+- 注意这个`chan send (nil chan)`，后面会提到
+
+2.读未初始化的chan
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	var c chan int
+	num, ok := <-c
+	fmt.Printf("读chan的协程结束，num=%v,ok=%v \n", num, ok)
+}
+
+//输出结果
+fatal error: all goroutines are asleep - deadlock!
+
+goroutine 1 [chan receive (nil chan)]:
+main.main()
+        D:/Golang-workspace/src/learning/Test/读写未初始化的chan/main.go:7 +0x4d
+```
+
+注意这个`chan receive (nil chan)`，后面也会提到
+
+**分析：**为什么对未初始化的chan读写就会阻塞呢？
+
+1.对于写的情况
+
+```go
+//在 src/runtime/chan.go中
+func chansend(c *hchan, ep unsafe.Pointer, block bool, callerpc uintptr) bool {
+	if c == nil {
+		if !block {
+			return false
+		}
+		gopark(nil, nil, waitReasonChanSendNilChan, traceEvGoStop, 2)
+		throw("unreachable")
+	}
+    ...
+}
+```
+
+- 未初始化的chan此时是等于nil，当它不能阻塞的情况下，直接返回false，表示写chan失败
+- 当chan能阻塞的情况下，则直接阻塞`gopark(nil, nil, waitReasonChanSendNilChan, traceEvGoStop, 2)`，然后调用`throw(s string)`抛出错误，其中`waitReasonChanSendNilChan`就是刚刚提到的报错信息`chan send (nil chan)`
+
+2.对于读的情况
+
+```go
+//在 src/runtime/chan.go中
+func chanrecv(c *hchan, ep unsafe.Pointer, block bool) (selected, received bool) {
+	// raceenabled: don't need to check ep, as it is always on the stack
+	// or is new memory allocated by reflect.
+	...
+	if c == nil {
+		if !block {
+			return
+		}
+		gopark(nil, nil, waitReasonChanReceiveNilChan, traceEvGoStop, 2)
+		throw("unreachable")
+	}
+    ...
+}
+```
+
+- 未初始化的chan此时是等于nil，当它不能阻塞的情况下，直接返回false，表示读chan失败
+- 当chan能阻塞的情况下，则直接阻塞`gopark(nil, nil, waitReasonChanReceiveNilChan, traceEvGoStop, 2)`，然后调用`throw(s string)`抛出错误，其中`waitReasonChanReceiveNilChan`就是刚刚提到的报错信息`chan receive (nil chan)`
+
+### 3.9Q：for循环select时，如果通道关闭会怎么样？如果select中的case只有一个，又会怎么样？
+
+- for循环`select`时，如果其中一个`case`通道已经关闭，则每次都会执行到这个case
+- 如果select里边只有一个case，而这个case被关闭了，则会出现死循环
+
+总结：
+
+- select中如果任意某个通道有值可读时，它就会被执行，其他被忽略
+- 如果没有`default`语句，select将有可能阻塞，直到某个通道有值可以运行，所以select最好有一个default，否则将有一直阻塞的风险
 
 ## 4.常见算法题
+
+### 4.1《剑指offer》解析
+
+- [《剑指offer》解析](https://github.com/zmk-c/go-offer)
+
+### 4.2 leetcode刷题顺序解析
+
+- [leetcode刷题顺序解析](https://github.com/zmk-c/leetcode)
 
 ## 5.其他
 
