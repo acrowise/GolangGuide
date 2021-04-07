@@ -1,4 +1,4 @@
-# GolangGuide	无__忧
+# GolangGuide	制作人——无__忧
 总结了golang常见的面试题，汇总了一些资料提供查看，欢迎大家star~
 
 ![go_monkey](https://raw.githubusercontent.com/zmk-c/GolangGuide/master/img/20210403192938.jpeg)
@@ -37,24 +37,16 @@
 # 5.其他
 
 - [5.1Redis相关]()
-
 - [5.2MySQL相关]()
-
 - [5.3操作系统相关]()
-
 - [5.4计算机网络相关]()
-
 - [5.5Git相关]()
-
 - [5.6Docker相关]()
-
 - [5.7Kubernetes相关]()
-
 - 5.8常见共识算法
-
-  - [5.8.1raft协议]()
-
-  - [5.8.2PBFT (Practical Byzantine Fault Tolerance,实用拜占庭容错)]()
+  - [5.8.1raft协议](consensus/raft.md)
+  - [5.8.2PBFT (Practical Byzantine Fault Tolerance,实用拜占庭容错)](consensus/pbft.md)
+  - [5.8.3Gossip协议](consensus/gossip.md)
 
 # 参考
 
