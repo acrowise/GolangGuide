@@ -1,11 +1,11 @@
 # GolangGuide	无__忧
-总结了golang常见的面试题，汇总了一些资料提供查看
+总结了golang常见的面试题，汇总了一些资料提供查看，欢迎大家star~
 
 ![go_monkey](https://raw.githubusercontent.com/zmk-c/GolangGuide/master/img/20210403192938.jpeg)
 
-# [1.基础知识归纳](golang/golang_guide.md)
+# [1.基础知识归纳](golang/base.md)
 
-# [2.常见类型源码分析](golang/golang_guide.md#2.常见类型源码分析)
+# [2.常见类型源码分析](golang/advance.md)
 
 - 2.1深度解密Go语言之slice
 - 2.2深度解密Go语言之map
@@ -17,7 +17,7 @@
 - 2.8图解Go语言内存分配
 - 2.9Go程序是怎样跑起来的
 
-# [3.常见面试题]()
+# [3.常见面试题](golang/FAQ.md)
 
 - 3.1Q:字符串转换成byte数组，会发生内存拷贝吗?有没有什么办法可以在转换时不发生拷贝呢?
 - 3.2Q:能说说uintptr和unsafe.Pointer的区 别吗?
