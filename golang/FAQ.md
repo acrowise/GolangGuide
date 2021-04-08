@@ -1,6 +1,6 @@
-## 3.常见面试题
+# 3.常见面试题
 
-### 3.1Q：字符串转换成byte数组，会发生内存拷贝吗？有没有什么办法可以在转换时不发生拷贝呢？
+## 3.1Q：字符串转换成byte数组，会发生内存拷贝吗？有没有什么办法可以在转换时不发生拷贝呢？
 
 A：字符串转换成切片，会产生拷贝，严格来说，`只要是发生类型强转都会发生内存拷贝`。转换后 [ ]byte 底层数组与原 string 内部指针并不相同，可以确定数据被复制。
 
@@ -50,14 +50,14 @@ func main() {
 >
 > 如果想要在底层转换二者，只需要把StringHeader的地址强转成SliceHeader就行，使用`unsafe`包。
 
-### 3.2Q：能说说uintptr和unsafe.Pointer的区别吗？
+## 3.2Q：能说说uintptr和unsafe.Pointer的区别吗？
 
 - `unsafe.Pointer`只是单纯的通用指针类型，用于转换不同类型的指针，它`不可以参与指针运算`。
 - `uintptr`是用于指针运算的，GC不会把uintptr当指针，也就是说uintptr无法持有对象，uintptr类型的目标会被回收
 - unsafe.Pointer可以和 普通指针 进行相互转换
 - unsafe.Pointer可以和 uintptr 进行相互转换
 
-### 3.3Q：拷贝大切片一定比小切片代价大吗？
+## 3.3Q：拷贝大切片一定比小切片代价大吗？
 
 A：并不是，所有的切片大小都相同，由3.2可知，slice切片的底层结构为SliceHeader
 
@@ -71,7 +71,7 @@ type SliceHeader struct {
 
 包含三个字段（一个uintptr，两个int）,切片中的第一个字是`指向切片底层数组的指针`，这是切片的存储空间；第二个字段是切片的`长度`；第三个字段是切片的`容量`。将一个slice变量分配给另外一个变量只会复制这三个字段的`机器字`长度。所以`拷贝大切片和小切片的代价是一样的`。大切片和小切片的区别无非是Len和Cap的大小。
 
-### 3.4Q：知道Golang的内存逃逸吗？什么情况下回发生内存逃逸？
+## 3.4Q：知道Golang的内存逃逸吗？什么情况下回发生内存逃逸？
 
 A：嗯，了解一些。在编译程序优化理论中，逃逸分析是一种`确定指针动态范围`的方法——分析在程序的哪些地方可以访问到指针。逃逸分析由编译器决定内存分配的位置（分配在`栈`中还是`堆`中），不需要程序员指定。Golang在`编译阶段确定逃逸`。
 
@@ -146,7 +146,7 @@ A：嗯，了解一些。在编译程序优化理论中，逃逸分析是一种`
 
 - `对象指针被多个子程序（如线程 协程）共享使用`
 
-### 3.5Q：怎么避免逃逸分析？
+## 3.5Q：怎么避免逃逸分析？
 
 A：在`runtime/stubs.go:133`有个函数叫`noescape`。noescape可以在逃逸分析中隐藏一个指针，让这个指针在逃逸分析中`不会被检测为逃逸`。
 
@@ -165,7 +165,7 @@ func noescape(p unsafe.Pointer) unsafe.Pointer {
 
 noescape()函数的作用是遮蔽输入和输出的依赖关系，是编译器不认为p会通过x逃逸，因此uintptr()产生的引用时编译器无法理解的。
 
-### 3.6Q：reflect（反射包）如何获取字段tag？为什么json包不能导出私有变量的tag？
+## 3.6Q：reflect（反射包）如何获取字段tag？为什么json包不能导出私有变量的tag？
 
 即Question：json包使用的时候，会在结体字段边加上加tag，有没有什么办法可以获取到这个`tag`的内容呢？
 
@@ -231,7 +231,7 @@ func typeFields(t reflect.Type) []field {
 }
 ```
 
-### 3.7Q：对已经关闭的chan进行读写会怎么样？为什么？
+## 3.7Q：对已经关闭的chan进行读写会怎么样？为什么？
 
 A：读`已经关闭`的chan能一直读到东西，但是读到的内容根据通道内`关闭前是否有元素`而不同
 
@@ -371,7 +371,7 @@ func chanrecv(c *hchan,ep unsafe.Pointer,block bool) (selected,received bool) {
 - `typedmemclr` 会根据类型清理相应地址的内存
 - 这就解释了上面代码为什么关闭的 chan 会返回对应类型的零值
 
-### 3.8Q：对未初始化的chan进行读写，会怎么样？为什么？
+## 3.8Q：对未初始化的chan进行读写，会怎么样？为什么？
 
 A：读写未初始化的chan都会阻塞
 
@@ -463,7 +463,7 @@ func chanrecv(c *hchan, ep unsafe.Pointer, block bool) (selected, received bool)
 - 未初始化的chan此时是等于nil，当它不能阻塞的情况下，直接返回false，表示读chan失败
 - 当chan能阻塞的情况下，则直接阻塞`gopark(nil, nil, waitReasonChanReceiveNilChan, traceEvGoStop, 2)`，然后调用`throw(s string)`抛出错误，其中`waitReasonChanReceiveNilChan`就是刚刚提到的报错信息`chan receive (nil chan)`
 
-### 3.9Q：for循环select时，如果通道关闭会怎么样？如果select中的case只有一个，又会怎么样？
+## 3.9Q：for循环select时，如果通道关闭会怎么样？如果select中的case只有一个，又会怎么样？
 
 - for循环`select`时，如果其中一个`case`通道已经关闭，则每次都会执行到这个case
 - 如果select里边只有一个case，而这个case被关闭了，则会出现死循环
@@ -472,4 +472,325 @@ func chanrecv(c *hchan, ep unsafe.Pointer, block bool) (selected, received bool)
 
 - select中如果任意某个通道有值可读时，它就会被执行，其他被忽略
 - 如果没有`default`语句，select将有可能阻塞，直到某个通道有值可以运行，所以select最好有一个default，否则将有一直阻塞的风险
+
+## 3.10Q：Go语言并发题目测试
+
+#### 1 Mutex
+
+```go
+package main
+import (
+	"fmt"
+	"sync"
+)
+var mu sync.Mutex
+var chain string
+func main() {
+	chain = "main"
+	A()
+	fmt.Println(chain)
+}
+func A() {
+	mu.Lock()
+	defer mu.Unlock()
+	chain = chain + " --> A"
+	B()
+}
+func B() {
+	chain = chain + " --> B"
+	C()
+}
+func C() {
+	mu.Lock()
+	defer mu.Unlock()
+	chain = chain + " --> C"
+}
+```
+
+- A: 不能编译
+- B: 输出 main --> A --> B --> C
+- C: 输出 main
+- D: panic
+
+#### 2 RWMutex
+
+```go
+package main
+import (
+	"fmt"
+	"sync"
+	"time"
+)
+var mu sync.RWMutex
+var count int
+func main() {
+	go A()
+	time.Sleep(2 * time.Second)
+	mu.Lock()
+	defer mu.Unlock()
+	count++
+	fmt.Println(count)
+}
+func A() {
+	mu.RLock()
+	defer mu.RUnlock()
+	B()
+}
+func B() {
+	time.Sleep(5 * time.Second)
+	C()
+}
+func C() {
+	mu.RLock()
+	defer mu.RUnlock()
+}
+```
+
+- A: 不能编译
+- B: 输出 1
+- C: 程序hang住
+- D: panic
+
+#### 3 Waitgroup
+
+```go
+package main
+import (
+	"sync"
+	"time"
+)
+func main() {
+	var wg sync.WaitGroup
+	wg.Add(1)
+	go func() {
+		time.Sleep(time.Millisecond)
+		wg.Done()
+		wg.Add(1)
+	}()
+	wg.Wait()
+}
+```
+
+- A: 不能编译
+- B: 无输出，正常退出
+- C: 程序hang住
+- D: panic
+
+#### 4 双检查实现单例
+
+```go
+package doublecheck
+import (
+	"sync"
+)
+type Once struct {
+	m    sync.Mutex
+	done uint32
+}
+func (o *Once) Do(f func()) {
+	if o.done == 1 {
+		return
+	}
+	o.m.Lock()
+	defer o.m.Unlock()
+	if o.done == 0 {
+		o.done = 1
+		f()
+	}
+}
+```
+
+- A: 不能编译
+- B: 可以编译，正确实现了单例
+- C: 可以编译，有并发问题，f函数可能会被执行多次
+- D: 可以编译，但是程序运行会panic
+
+#### 5 Mutex
+
+```go
+package main
+import (
+	"fmt"
+	"sync"
+)
+type MyMutex struct {
+	count int
+	sync.Mutex
+}
+func main() {
+	var mu MyMutex
+	mu.Lock()
+	var mu2 = mu
+	mu.count++
+	mu.Unlock()
+	mu2.Lock()
+	mu2.count++
+	mu2.Unlock()
+	fmt.Println(mu.count, mu2.count)
+}
+```
+
+- A: 不能编译
+- B: 输出 1, 1
+- C: 输出 1, 2
+- D: panic
+
+#### 6 Pool
+
+```go
+package main
+import (
+	"bytes"
+	"fmt"
+	"runtime"
+	"sync"
+	"time"
+)
+var pool = sync.Pool{New: func() interface{} { return new(bytes.Buffer) }}
+func main() {
+	go func() {
+		for {
+			processRequest(1 << 28) // 256MiB
+		}
+	}()
+	for i := 0; i < 1000; i++ {
+		go func() {
+			for {
+				processRequest(1 << 10) // 1KiB
+			}
+		}()
+	}
+	var stats runtime.MemStats
+	for i := 0; ; i++ {
+		runtime.ReadMemStats(&stats)
+		fmt.Printf("Cycle %d: %dB\n", i, stats.Alloc)
+		time.Sleep(time.Second)
+		runtime.GC()
+	}
+}
+func processRequest(size int) {
+	b := pool.Get().(*bytes.Buffer)
+	time.Sleep(500 * time.Millisecond)
+	b.Grow(size)
+	pool.Put(b)
+	time.Sleep(1 * time.Millisecond)
+}
+```
+
+- A: 不能编译
+- B: 可以编译，运行时正常，内存稳定
+- C: 可以编译，运行时内存可能暴涨
+- D: 可以编译，运行时内存先暴涨，但是过一会会回收掉
+
+#### 7 channel
+
+```go
+package main
+import (
+	"fmt"
+	"runtime"
+	"time"
+)
+func main() {
+	var ch chan int
+	go func() {
+		ch = make(chan int, 1)
+		ch <- 1
+	}()
+	go func(ch chan int) {
+		time.Sleep(time.Second)
+		<-ch
+	}(ch)
+	c := time.Tick(1 * time.Second)
+	for range c {
+		fmt.Printf("#goroutines: %d\n", runtime.NumGoroutine())
+	}
+}
+```
+
+- A: 不能编译
+- B: 一段时间后总是输出 `#goroutines: 1`
+- C: 一段时间后总是输出 `#goroutines: 2`
+- D: panic
+
+#### 8 channel
+
+```go
+package main
+import "fmt"
+func main() {
+	var ch chan int
+	var count int
+	go func() {
+		ch <- 1
+	}()
+	go func() {
+		count++
+		close(ch)
+	}()
+	<-ch
+	fmt.Println(count)
+}
+```
+
+- A: 不能编译
+- B: 输出 1
+- C: 输出 0
+- D: panic
+
+#### 9 Map
+
+```go
+package main
+import (
+	"fmt"
+	"sync"
+)
+func main() {
+	var m sync.Map
+	m.LoadOrStore("a", 1)
+	m.Delete("a")
+	fmt.Println(m.Len())
+}
+```
+
+- A: 不能编译
+- B: 输出 1
+- C: 输出 0
+- D: panic
+
+#### 10 happens before
+
+```go
+package main
+var c = make(chan int)
+var a int
+func f() {
+	a = 1
+	<-c
+}
+func main() {
+	go f()
+	c <- 0
+	print(a)
+}
+```
+
+- A: 不能编译
+- B: 输出 1
+- C: 输出 0
+- D: panic
+
+#### 答案:
+
+1. D	会产生死锁`panic`，因为`Mutex` 是互斥锁。
+2. D   会产生死锁`panic`，根据`sync/rwmutex.go` 中注释可以知道，读写锁当有一个协程在等待写锁时，其他协程是不能获得读锁的，而在`A`和`C`中同一个调用链中间需要让出读锁，让写锁优先获取，而`A`的读锁又要求`C`调用完成，因此死锁。
+3. D  `WaitGroup` 在调用 `Wait` 之后是不能再调用 `Add` 方法的。
+4. C  在多核CPU中，因为CPU缓存会导致多个核心中变量值不同步。
+5. D  加锁后复制变量，会将锁的状态也复制，所以`mu1` 其实是已经加锁状态，再加锁会死锁。
+6. C  个人理解，在单核CPU中，内存可能会稳定在`256MB`，如果是多核可能会暴涨。
+7. C  因为 `ch` 未初始化，写和读都会阻塞，之后被第一个协程重新赋值，导致写的`ch` 都阻塞。
+8. D  `ch` 未有被初始化，关闭时会报错。
+9.  A  `sync.Map` 没有 `Len` 方法。
+10. B  `c <- 0` 会阻塞依赖于 `f()` 的执行。
 
