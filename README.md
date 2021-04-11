@@ -55,7 +55,9 @@
   - [5.4.2在B站看猫片被老板发现？不如按下F12学学HTTP](https://mp.weixin.qq.com/s/T41YBEmG4lkxokDLzRxVgA)
   - [5.4.3TCP粘包 数据包：我只是犯了每个数据包都会犯的错 |硬核图解](https://mp.weixin.qq.com/s/0H8WL6QeZ2VbO1hHPkn8Ug)
 - [5.5Git相关](git/git.md)
-- [5.6Docker相关](docker/docker.md)
+- 5.6Docker相关
+  - [5.6.1docker知识](docker/docker.md)
+  - [5.6.2docker-compose容器编排技术](docker/docker-compose.md)
 - 5.7Kubernetes相关
 - 5.8常见共识算法
   - [5.8.1raft协议](consensus/raft.md)

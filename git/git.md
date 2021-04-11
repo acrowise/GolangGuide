@@ -1,4 +1,4 @@
-# 5.5GIt
+# 5.5Git
 
 ![image-20210407120656916](https://raw.githubusercontent.com/zmk-c/GolangGuide/master/img/20210407120657.png)
 
