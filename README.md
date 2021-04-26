@@ -62,7 +62,7 @@
 - ### MySQL
   
   - [MySQL数据库经典面试题解析](mysql/mysql100.md)
-  - [MySQL InnoDB MVCC 机制的原理及实现](mysql/mysql-mvcc.md)
+  - [MySQL InnoDB MVCC 机制的原理及实现](mysql/mysql_mvcc.md)
   - [为什么MySQL使用B+树做索引？](mysql/mysql-B+.md)
 
 ## 操作系统💻
