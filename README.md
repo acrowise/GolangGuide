@@ -1,88 +1,92 @@
-# GolangGuide	制作人——无__忧
+# GolangGuide	制作人——无__忧👦 
 总结了golang常见的面试题，汇总了一些资料提供查看，后续会继续补充完善，欢迎大家star~:smiley:
 
-![go_monkey](https://raw.githubusercontent.com/zmk-c/GolangGuide/master/img/20210403192938.jpeg)
+|    基础归纳    |    源码分析    |    常见面试题    |    算法    |    数据库    |    操作系统    |    计算机网络    |    工具    |
+| :------------: | :------------: | :--------------: | :--------: | :----------: | :------------: | :--------------: | :--------: |
+| [📓](#基础归纳) | [📃](#源码分析) | [🕕](#常见面试题) | [⌛️](#算法) | [💾](#数据库) | [💻](#操作系统) | [☁️](#计算机网络) | [🔧](#工具) |
 
-# [1.基础知识归纳](golang/base.md)
+<img src="https://raw.githubusercontent.com/zmk-c/GolangGuide/master/img/20210403192938.jpeg" alt="go_monkey" style="zoom:50%;" />
 
-# [2.常见类型源码分析](golang/advance.md)
+## 基础归纳📓 
 
-- 2.1深度解密Go语言之slice
-- 2.2深度解密Go语言之map
-- 2.3深度解密语言之channel
-- 2.4深度解密Go语言之context
-- 2.5深度解密Go语言之unsafe
-- 2.6深度解密Go语言之反射
-- 2.7深度解密Go语言之关于interface 的10个问题
-- 2.8图解Go语言内存分配
-- 2.9Go程序是怎样跑起来的
-- 2.10Go语言的GPM调度器是什么？
+- [Go语言基础知识细节](golang/base/base.md)
+- [Go语言常用包](golang/package/package.md)
 
-# [3.常见面试题](golang/FAQ.md)
+## 源码分析📃
 
-- 3.1Q：字符串转换成byte数组，会发生内存拷贝吗?有没有什么办法可以在转换时不发生拷贝呢?
-- 3.2Q：能说说uintptr和unsafe.Pointer的区 别吗?
-- 3.3Q：拷贝大切片-定比小切片代价大吗?
-- 3.4Q：知道Golang的内存逃逸吗?什么情况下回发生内存逃逸?
-- 3.5Q：怎么避免逃逸分析?
-- 3.6Q：reflect (反射包)如何获取字段tag? 为什么json包不能导出私有变量的tag?
-- 3.7Q：对已经关闭的chan进行读写会怎么样?为什么?
-- 3.8Q：对未初始化的chan进行读写，会怎么样?为什么?
-- 3.9Q：for循环select时， 如果通道关闭会怎么样?如果select中的case只有一 个，又会怎么样?
-- 3.10Q：Go语言并发题目测试
+1. [Go语言源码分析之slice](golang/source_code/slice.md)
+2. [Go语言源码分析之map](golang/source_code/map.md)
+3. [Go语言源码分析之channel](golang/source_code/channel.md)
+4. [Go语言源码分析之context](golang/source_code/context.md)
+5. [Go语言源码分析之unsafe](golang/source_code/unsafe.md)
+6. [Go语言源码分析之reflect](golang/source_code/reflect.md)
+7. [Go语言源码分析之interface ](golang/source_code/interface.md)
+8. [Go语言源码分析之内存分配](golang/source_code/memory_distribution.md)
+10. [Go语言源码分析之GPM调度器](golang/source_code/gpm.md)
+11. Go语言源码分析之GC
 
-# 4.常见算法题
+## 常见面试题🕕 
 
-- [4.1《剑指offer》解析](https://github.com/zmk-c/go-offer)
-- [4.2leetcode刷题顺序解析](https://github.com/zmk-c/leetcode)
-- 4.3经典排序算法
+1. [字符串转换成byte数组，会发生内存拷贝吗?有没有什么办法可以在转换时不发生拷贝呢?](golang/faq/1.md)
+2. [能说说uintptr和unsafe.Pointer的区别吗?](golang/faq/2.md)
+3. [拷贝大切片一定比小切片代价大吗?](golang/faq/3.md)
+4. [知道Golang的内存逃逸吗?什么情况下回发生内存逃逸?](golang/faq/4.md)
+5. [怎么避免逃逸分析?](golang/faq/5.md)
+6. [reflect (反射包)如何获取字段tag? 为什么json包不能导出私有变量的tag?](golang/faq/6.md)
+7. [对已经关闭的chan进行读写会怎么样?为什么?](golang/faq/7.md)
+8. [对未初始化的chan进行读写，会怎么样?为什么?](golang/faq/8.md)
+9. [for循环select时， 如果通道关闭会怎么样?如果select中的case只有一 个，又会怎么样?](golang/faq/9.md)
+10. [10道Go语言并发题目测试](golang/faq/10.md)
 
-# 5.其他
+## 算法 ⌛️ 
 
-- 5.1Redis相关
-  - [5.1.1Redis基础结构](redis/base.md)
-  - [5.1.2Redis的底层数据结构](redis/under.md)
-  - [5.1.3Redis持久化原理及优化](redis/persistence.md)
-  - [5.1.4Redis中内存淘汰算法实现](redis/algorithm.md)
-  - [5.1.5Redis中主从复制原理](redis/policy.md)
-- 5.2MySQL相关
-  - [5.2.1MySQL数据库经典面试题解析](mysql/mysql100.md)
-  - [5.2.2MySQL InnoDB MVCC 机制的原理及实现](mysql/mysql-mvcc.md)
-  - [5.2.3为什么MySQL使用B+树做索引？](mysql/mysql-B+.md)
-- 5.3操作系统相关
-- 5.4计算机网络相关
-  - [5.4.1计算机网络基础](network/network.md)
-  - [5.4.2在B站看猫片被老板发现？不如按下F12学学HTTP](https://mp.weixin.qq.com/s/T41YBEmG4lkxokDLzRxVgA)
-  - [5.4.3TCP粘包 数据包：我只是犯了每个数据包都会犯的错 |硬核图解](https://mp.weixin.qq.com/s/0H8WL6QeZ2VbO1hHPkn8Ug)
-- [5.5Git相关](git/git.md)
-- 5.6Docker相关
-  - [5.6.1docker知识](docker/docker.md)
-  - [5.6.2docker-compose容器编排技术](docker/docker-compose.md)
-- 5.7Kubernetes相关
-- 5.8常见共识算法
-  - [5.8.1raft协议](consensus/raft.md)
-  - [5.8.2PBFT (Practical Byzantine Fault Tolerance,实用拜占庭容错)](consensus/pbft.md)
-  - [5.8.3Gossip协议](consensus/gossip.md)
+- [《剑指offer》解析](https://github.com/zmk-c/go-offer)
+- [leetcode刷题顺序解析](https://github.com/zmk-c/leetcode)
+- [经典排序算法](sort/algorithm.md)
+- 常见共识算法
+  - [Raft协议](consensus/raft.md)
+  - [PBFT协议](consensus/pbft.md)
+  - [Gossip协议](consensus/gossip.md)
 
-# 参考
+## 数据库 💾 
 
-- 公众号:
-  - Go语言中文网
-  - golang小白成长记
-  - 码农桃花源
-
-- 网址：
-
-  - [共识算法：Raft](https://www.jianshu.com/p/8e4bbe7e276c)
-  - [Raft原理动画](http://thesecretlivesofdata.com/raft/)
-  - [100道MySQL数据库经典面试题解析（收藏版）](https://juejin.im/post/5ec15ab9f265da7bc60e1910 )
-  - [再有人问你为什么MySQL用B+树做索引，就把这篇文章发给她](https://mp.weixin.qq.com/s?__biz=MzIwOTE2MzU4NA==&mid=2247484085&idx=1&sn=92639430ac7ef3e412b550a09bde0115&chksm=9779469aa00ecf8c157e899fe0d5c5b060b282a4e5f2f2f63c187eb3c04d04ef6fad7a1e09e3&token=472896045&lang=zh_CN#rd)
-  - [你真的懂MVCC吗？来手动实践一下？](https://juejin.im/post/5da8493ae51d4524b25add55)
-  - [一文看懂Redis的持久化原理](https://juejin.im/post/5b70dfcf518825610f1f5c16)
-  -  [Redis中的数据结构](https://www.cnblogs.com/neooelric/p/9621736.html)
-  -  [Redis中内存淘汰算法实现](http://fivezh.github.io/2019/01/10/Redis-LRU-algorithm/)
-  -  [写给大忙人的Redis主从复制，花费五分钟让你面试不尴尬](https://juejin.im/post/5ed5ccb66fb9a047df7ca9a4)
+- ### Redis
   
-- 论文：
+  - [Redis基础](redis/base.md)
+  - [Redis的底层数据结构](redis/under_struct.md)
+  - [Redis持久化原理及优化](redis/persistence.md)
+  - [Redis中的主从复制原理](redis/master-slave.md)
+  - [Redis中的内存淘汰策略](redis/memory.md)
+  - [Redis缓存雪崩、击穿、穿透及解决方案](redis/solution.md)
+  - [Redis常见问题](redis/faq.md)
+- ### MySQL
+  
+  - [MySQL数据库经典面试题解析](mysql/mysql100.md)
+  - [MySQL InnoDB MVCC 机制的原理及实现](mysql/mysql-mvcc.md)
+  - [为什么MySQL使用B+树做索引？](mysql/mysql-B+.md)
 
-  - Ongaro D, Ousterhout J. In search of an understandable consensus algorithm［C］// USENIX Annual Technical Conference. [s.l.]: USENIX. 2014: 305-319．
+## 操作系统💻
+
+- 计算机操作系统
+- Linux系统
+
+## 计算机网络☁️
+
+- [计算机网络基础](network/network.md)
+- [在B站看猫片被老板发现？不如按下F12学学HTTP](https://mp.weixin.qq.com/s/T41YBEmG4lkxokDLzRxVgA)
+- [TCP粘包 数据包：我只是犯了每个数据包都会犯的错 |硬核图解](https://mp.weixin.qq.com/s/0H8WL6QeZ2VbO1hHPkn8Ug)
+- [硬核图解！30张图带你搞懂！路由器，集线器，交换机，网桥，光猫有啥区别？](https://mp.weixin.qq.com/s/BJqp72EyEMahxi2XOfSrBQ)
+
+## 工具🔧 
+
+- ### [Git](git/git.md)
+
+- ### Docker
+  
+  - [docker基础](docker/docker.md)
+  - [docker-compose容器编排技术](docker/docker-compose.md)
+  
+- ### Kubernetes
+
+
+### 未完待续...

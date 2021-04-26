@@ -1,4 +1,4 @@
-# 5.6.2Docker-compose容器编排技术
+# Docker-compose容器编排技术
 
 ![image-20210411111005082](https://raw.githubusercontent.com/zmk-c/GolangGuide/master/img/20210411111012.png)
 

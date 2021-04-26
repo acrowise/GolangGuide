@@ -1,8 +1,8 @@
-# 5.1.2Redis中的数据结构
+# Redis中的数据结构
 
 ## 1. 底层数据结构, 与Redis Value Type之间的关系
 
-对于Redis的使用者来说, Redis作为Key-Value型的内存数据库, 其Value有多种类型.
+对于Redis的使用者来说，Redis作为Key-Value型的内存数据库，常见有以下五种类型：
 
 - String
 - Hash
@@ -967,3 +967,7 @@ zipmap的定义与实现在src/zipmap.h与src/zipmap.c两个文件中, 其定义
     4. len_of_free, 固定值1字节, 存储的是entry中未使用的空间的字节数. 未使用的空间即为图中的free, 它一般是由于键值对中的值被替换发生的. 比如, 键值对hello <-> word被修改为hello <-> w后, 就空了四个字节的闲置空间
     5. val_data, 为值的数据
     6. free, 为闲置空间. 由于len_of_free的值最大只能是254, 所以如果值的变更导致闲置空间大于254的话, zipmap就会回收内存空间.
+
+
+
+> **参考：**[Redis中的数据结构](https://www.cnblogs.com/neooelric/p/9621736.html)

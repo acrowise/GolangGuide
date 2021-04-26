@@ -1,4 +1,4 @@
-# 5.2.1MySQL数据库经典面试题解析
+# MySQL数据库经典面试题解析
 
 ## 1. MySQL 索引使用有哪些注意事项呢？
 
@@ -1033,3 +1033,6 @@ select * from b , (select tid from a limit 50000,200) a where b.id = a .tid;
 - 组合八：id列上没有索引，RR隔离级别
 - 组合九：Serializable隔离级别
 
+
+
+> **参考：**[100道MySQL数据库经典面试题解析（收藏版）](https://juejin.im/post/5ec15ab9f265da7bc60e1910 )
